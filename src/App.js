@@ -47,42 +47,75 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Comments</h1>
-      <ul>
-        {comments.map(comment => (
-          <li key={comment.id}>
-            {editCommentId === comment.id ? (
-              <>
-                <input
-                  type="text"
-                  value={editCommentText}
-                  onChange={(e) => setEditCommentText(e.target.value)}
-                />
-                <button onClick={() => handleEdit(comment.id, editCommentText)}>Save</button>
-              </>
-            ) : (
-              <>
-                <p>{comment.text}</p>
-                <p>Author: {comment.author}</p>
-                <p>Date: {comment.date}</p>
-                <p>Likes: {comment.likes}</p>
-                {comment.images && <img src={comment.images} alt="Comment Image" />}
-                <button onClick={() => setEditCommentId(comment.id)}>Edit</button>
-                <button onClick={() => handleDelete(comment.id)}>Delete</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-
+    <div className="max-w-2xl mx-auto mt-8">
+    <h1 className="text-3xl text-center font-bold mb-4">Comments</h1>
+    <div className="mt-4">
       <input
         type="text"
         value={newCommentText}
         onChange={(e) => setNewCommentText(e.target.value)}
+        className="border p-2 mr-2"
       />
-      <button onClick={handleAdd}>Add Comment</button>
+      <button
+        onClick={handleAdd}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Add Comment
+      </button>
     </div>
+    <ul>
+      {comments.map(comment => (
+        <li key={comment.id} className="border p-4 mb-4">
+          {editCommentId === comment.id ? (
+            <>
+              <input
+                type="text"
+                value={editCommentText}
+                onChange={(e) => setEditCommentText(e.target.value)}
+                className="border p-2 mr-2"
+              />
+              <button
+                onClick={() => handleEdit(comment.id, editCommentText)}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Save
+              </button>
+            </>
+          ) : (
+            <>
+              <p>Description: {comment.text}</p>
+              <p>Author: {comment.author}</p>
+              <p>Date: {comment.date}</p>
+              <p>Likes: {comment.likes}</p>
+              {comment.image && 
+                <img
+                    src={comment.image}
+                    alt={comment.image}
+                    style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+                />
+              }
+              <div className="mt-4">
+                <button
+                  onClick={() => setEditCommentId(comment.id)}
+                  className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(comment.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+
+    
+  </div>
   );
 };
 
