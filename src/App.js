@@ -6,6 +6,7 @@ const App = () => {
   const [newCommentText, setNewCommentText] = useState('');
   const [editCommentText, setEditCommentText] = useState('');
   const [editCommentId, setEditCommentId] = useState(null);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/comments/')
@@ -46,6 +47,34 @@ const App = () => {
     }
   };
 
+  const handLikes = async () => {
+    //intially it is saved as the order of date
+    //first time i CLICK SORT THEN IT WILL BE SORTED BY LIKES
+    //SECOND TIME I CLICK SORT THEN IT WILL BE SORTED BY DATE
+    let bool=true;
+    if(likes===0){
+      try {
+        const response = await axios.get('http://localhost:8000/api/comments/');
+        setComments(response.data.sort((a, b) => b.likes - a.likes));
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+      setLikes(1);
+      bool=false;
+    }
+    else{
+      try {
+        const response = await axios.get('http://localhost:8000/api/comments/');
+        setComments(response.data.sort((a, b) => b.date - a.date));
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+      setLikes(0);
+      //bool=true;
+    }
+    
+  };
+
   return (
     <div className="max-w-2xl mx-auto mt-8">
     <h1 className="text-3xl text-center font-bold mb-4">Comments</h1>
@@ -55,13 +84,14 @@ const App = () => {
         value={newCommentText}
         onChange={(e) => setNewCommentText(e.target.value)}
         className="border p-2 mr-2"
-      />
+        />
       <button
         onClick={handleAdd}
         className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+        >
         Add Comment
       </button>
+        <button onClick={handLikes}>Sort</button>
     </div>
     <ul>
       {comments.map(comment => (
